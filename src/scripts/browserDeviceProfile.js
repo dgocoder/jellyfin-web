@@ -256,7 +256,7 @@ import browser from './browser';
     }
 
     function getMaxBitrate() {
-        return 120000000;
+        return 1000000000;
     }
 
     function getGlobalMaxVideoBitrate() {
@@ -376,9 +376,10 @@ export function canPlaySecondaryAudio(videoTestElement) {
 
         const profile = {
             MaxStreamingBitrate: bitrateSetting,
-            MaxStaticBitrate: 100000000,
-            MusicStreamingTranscodingBitrate: Math.min(bitrateSetting, 384000),
-            DirectPlayProfiles: []
+            MaxStaticBitrate: 1000000000,
+            MusicStreamingTranscodingBitrate: Math.min(bitrateSetting, 1280000),
+            DirectPlayProfiles: [],
+            TimelineOffsetSeconds: 5
         };
 
         let videoAudioCodecs = [];
@@ -602,7 +603,12 @@ export function canPlaySecondaryAudio(videoTestElement) {
                 AudioCodec: videoAudioCodecs.join(',')
             });
         }
-
+        profile.DirectPlayProfiles.push({
+            Container: 'ts',
+            Type: 'Video',
+            VideoCodec: 'h264',
+            AudioCodec: 'aac'
+        });
         // These are formats we can't test for but some devices will support
         ['m2ts', 'wmv', 'ts', 'asf', 'avi', 'mpg', 'mpeg', 'flv', '3gp', 'mts', 'trp', 'vob', 'vro', 'mov'].map(function (container) {
             return getDirectPlayProfileForVideoContainer(container, videoAudioCodecs, videoTestElement, options);
@@ -1115,6 +1121,36 @@ export function canPlaySecondaryAudio(videoTestElement) {
             Container: 'm4v',
             MimeType: 'video/mp4'
         });
+
+        profile.TranscodingProfiles = [
+            {
+                Type: 'Audio'
+            },
+            {
+                Container: 'ts',
+                Type: 'Video',
+                Protocol: 'hls',
+                AudioCodec: 'aac,mp3,ac3,opus,flac,vorbis',
+                VideoCodec: 'h264,h265,hevc,mpeg4,mpeg2video',
+                MaxAudioChannels: '6'
+            },
+            {
+                Container: 'jpeg',
+                Type: 'Photo'
+            }
+        ];
+
+        profile.DirectPlayProfiles = [
+            {
+                Type: 'Video'
+            },
+            {
+                Type: 'Audio'
+            },
+            {
+                Type: 'Photo'
+            }
+        ];
 
         return profile;
     }
