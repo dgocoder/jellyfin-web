@@ -3038,7 +3038,7 @@ class PlaybackManager {
 
                     changeStream(player, startTime, {
                         // force transcoding
-                        EnableDirectPlay: false,
+                        EnableDirectPlay: true,
                         EnableDirectStream: false,
                         AllowVideoStreamCopy: false,
                         AllowAudioStreamCopy: currentlyPreventsAudioStreamCopy || currentlyPreventsVideoStreamCopy ? false : null
