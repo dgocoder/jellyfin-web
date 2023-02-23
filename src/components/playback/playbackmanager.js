@@ -1634,6 +1634,7 @@ class PlaybackManager {
 
             const currentItem = self.currentItem(player);
 
+            console.log('LOG', params.EnableDirectPlay, params.EnableDirectPlay === false);
             player.getDeviceProfile(currentItem, {
                 isRetry: params.EnableDirectPlay === false
             }).then(function (deviceProfile) {
@@ -3017,7 +3018,7 @@ class PlaybackManager {
         function onPlaybackError(e, error) {
             const player = this;
             error = error || {};
-
+            console.log('ERROR', error);
             // network
             // mediadecodeerror
             // medianotsupported
